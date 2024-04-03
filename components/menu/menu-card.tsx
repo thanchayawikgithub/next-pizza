@@ -17,12 +17,12 @@ interface MenuCardProps {
 
 export const MenuCard = ({ pizza }: MenuCardProps) => {
   return (
-    <Card className="rounded-none hover:drop-shadow-md">
-      <CardContent className="flex justify-center items-center flex-col mt-4">
+    <Card className="rounded-none hover:drop-shadow-md flex flex-col justify-between">
+      <CardContent className="flex justify-center items-center flex-col mt-4 group">
         {pizza.image && (
           <Image
             src={pizza.image}
-            alt="menu"
+            alt="pizza"
             width={300}
             height={300}
             style={{ transform: "scale(1.3)" }}
@@ -30,7 +30,7 @@ export const MenuCard = ({ pizza }: MenuCardProps) => {
         )}
         <div className="border border-slate-200 w-full my-4" />
         <div>
-          <h1 className="text-2xl">{pizza.name}</h1>
+          <h1 className="text-2xl mb-1 font-semibold">{pizza.name}</h1>
           <p>{pizza.ingrediants}</p>
         </div>
       </CardContent>
