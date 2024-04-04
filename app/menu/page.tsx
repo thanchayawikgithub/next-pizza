@@ -1,3 +1,5 @@
+import MenuList from "./_components/menu-list";
+
 export default function Menu() {
-  return <div>Menu Page</div>;
+  return <MenuList />;
 }

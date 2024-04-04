@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ThumbsUp } from "lucide-react";
 
 import Image from "next/image";
 
@@ -18,7 +19,7 @@ interface MenuCardProps {
 export const MenuCard = ({ pizza }: MenuCardProps) => {
   return (
     <Card className="rounded-none hover:drop-shadow-md flex flex-col justify-between">
-      <CardContent className="flex justify-center items-center flex-col mt-4 group">
+      <CardContent className="flex justify-center items-center flex-col mt-4 relative">
         {pizza.image && (
           <Image
             src={pizza.image}

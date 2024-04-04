@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export const Banner = () => {
   return (
@@ -18,13 +19,19 @@ export const Banner = () => {
             Order now for a daily dose of delicious delight!
           </p>
         </div>
-        <Button className="max-w-[300px] h-16 rounded-none text-2xl group">
-          Order Now
-          <ArrowRight
-            className="relative ml-2 group-hover:animate-pulse"
-            size={30}
-          />
-        </Button>
+        {/* <Button className="max-w-[300px] h-16 rounded-none text-2xl group">
+            Order Now
+            <ArrowRight
+              className="relative ml-2 group-hover:animate-pulse"
+              size={30}
+            />
+          </Button> */}
+        <Link href="/menu" className="w-[300px]">
+          <Button className="w-[300px] h-16 rounded-none text-2xl group">
+            Order Now
+            <ArrowRight className="ml-2 group-hover:animate-pulse" size={30} />
+          </Button>
+        </Link>
       </div>
       <div className="h-full flex items-center justify-center w-full max-w-[800px] relative">
         <Image src="/home.png" alt="pizza" width={800} height={800} />

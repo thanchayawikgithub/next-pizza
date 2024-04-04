@@ -7,10 +7,12 @@ import Link from "next/link";
 export const NavMenu = async () => {
   return (
     <div className="flex items-center justify-end gap-x-4">
-      <Button variant="text" className="text-xl hover:animate-pulse">
-        Menu <ChevronDown size={20} className="ml-1" />
-      </Button>
-      <Button size="icon" variant="text">
+      <Link href="/menu">
+        <Button variant="ghost" className="text-xl">
+          Menu
+        </Button>
+      </Link>
+      <Button size="icon" variant="ghost">
         <ShoppingBag size={30} />
       </Button>
 
