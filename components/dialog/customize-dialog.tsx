@@ -12,15 +12,19 @@ import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Size } from "@/types/size";
-import { Crust } from "@/types/Crust";
+import { Crust } from "@/types/crust";
+import { createClient } from "@/utils/supabase/client";
+import { useToast } from "../ui/use-toast";
 
 export const CustomizeDialog = () => {
+  const supabase = createClient();
   const { isOpen, onClose, pizza, initialValues } = useCustomizeDialogStore();
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState<Size>(Size.medium);
   const [crust, setCrust] = useState<Crust>(Crust.original);
   const [totalPrice, setTotalPrice] = useState(0);
-  // const totalPrice = useMemo(() => price * quantity, [size, crust, quantity]);
+
+  const { toast } = useToast();
 
   const increaseQuantity = () => {
     setQuantity((prev) => prev + 1);
@@ -38,17 +42,6 @@ export const CustomizeDialog = () => {
     setCrust(crust);
   };
 
-  const addToCart = () => {
-    const cartItem: CartItem = {
-      pizza_id: pizza?.id || 0,
-      quantity: quantity,
-      size: size,
-      crust: crust,
-      cart_id: 0,
-      total_price: totalPrice,
-    };
-  };
-
   const prepareForm = () => {
     setQuantity(initialValues.quantity);
     setSize(initialValues.size);
@@ -57,10 +50,79 @@ export const CustomizeDialog = () => {
   };
 
   useEffect(() => {
-    prepareForm();
+    if (isOpen === true) {
+      prepareForm();
+    }
   }, [isOpen]);
 
+  useEffect(() => {
+    setTotalPrice(
+      (size === Size.large ? (pizza?.price || 0) + 150 : pizza?.price || 0) *
+        quantity
+    );
+  }, [quantity, size, crust]);
+
   if (!pizza) return null;
+
+  const addToCart = async () => {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+
+    if (error) {
+      console.error(error);
+    }
+    if (user) {
+      const insertCartItem: InsertCartItem = {
+        pizza_id: pizza.id,
+        name: pizza.name,
+        quantity: quantity,
+        size: size,
+        crust: crust,
+        cart_id: user.id,
+        total_price: totalPrice,
+      };
+
+      let { data: cartItem, error: getCartItemError } = await supabase
+        .from("cart_items")
+        .select("*")
+        .eq("cart_id", user.id)
+        .eq("pizza_id", pizza.id)
+        .eq("size", size)
+        .eq("crust", crust)
+        .maybeSingle();
+
+      if (getCartItemError) {
+        console.error(getCartItemError);
+      }
+
+      if (cartItem) {
+        const { error } = await supabase
+          .from("cart_items")
+          .update({ quantity: cartItem.quantity + quantity })
+          .eq("id", cartItem.id);
+
+        if (error) {
+          console.error(error);
+        }
+      } else {
+        const { error } = await supabase
+          .from("cart_items")
+          .insert([{ ...insertCartItem }]);
+
+        if (error) {
+          console.error(error);
+        }
+      }
+      onClose();
+
+      toast({
+        title: "Added item to cart",
+        description: `${pizza.name} (${crust}, ${size}) x ${quantity}`,
+      });
+    }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -98,7 +160,7 @@ export const CustomizeDialog = () => {
                 variant={size === Size.large ? "default" : "outline"}
                 onClick={selectSize(Size.large)}
               >
-                Large
+                Large | +150 ฿
               </Button>
             </div>
             <h1 className="text-xl font-semibold mt-5">Select Crust</h1>

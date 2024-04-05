@@ -15,7 +15,7 @@ export const RecommendMenu = () => {
       .from("pizzas")
       .select("*")
       .eq("recommend", "true");
-    console.log(data);
+
     if (error) {
       console.log(error);
     }

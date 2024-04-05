@@ -1,4 +1,4 @@
-import { Crust } from "@/types/Crust";
+import { Crust } from "@/types/crust";
 import { Size } from "@/types/size";
 import { create } from "zustand";
 
