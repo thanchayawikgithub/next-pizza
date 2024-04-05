@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 
-import { ChevronDown, ShoppingBag } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
 
 export const NavMenu = async () => {
@@ -12,7 +12,10 @@ export const NavMenu = async () => {
           Menu
         </Button>
       </Link>
-      <Button size="icon" variant="ghost">
+      <Button size="icon" variant="ghost" className="relative">
+        <div className="absolute -top-1 -right-1 bg-black text-white rounded-full text-xs p-1">
+          10
+        </div>
         <ShoppingBag size={30} />
       </Button>
 

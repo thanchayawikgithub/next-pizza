@@ -1,21 +1,8 @@
 "use client";
 import { MenuCard } from "@/components/menu/menu-card";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { createClient } from "@/utils/supabase/client";
 import { useEffect, useState } from "react";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
 
 export default function MenuList() {
   const supabase = createClient();
@@ -23,22 +10,12 @@ export default function MenuList() {
   const [search, setSearch] = useState<string>("");
   const [isRecommend, setIsRecommend] = useState(false);
 
-  // const FormSchema = z.object({
-  //   mobile: z.boolean().default(false).optional(),
-  // });
-
-  // const form = useForm<z.infer<typeof FormSchema>>({
-  //   resolver: zodResolver(FormSchema),
-  //   defaultValues: {
-  //     mobile: true,
-  //   },
-  // });
-
   const fetchPizzas = async () => {
     let query = supabase
       .from("pizzas")
       .select("*")
-      .ilike("name", `%${search}%`);
+      .ilike("name", `%${search}%`)
+      .order("recommend", { ascending: false });
     if (isRecommend) {
       query = query.eq("recommend", true);
     }

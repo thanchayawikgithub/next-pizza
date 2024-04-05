@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { NavBar } from "@/components/navbar";
-
+import { CustomizeDialog } from "@/components/dialog/customize-dialog";
+import { DialogProvider } from "@/providers/dialog-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -20,6 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="h-full px-5 sm:px-16 md:px-36 lg:px-36">
           <NavBar />
+          <DialogProvider />
           {children}
         </div>
       </body>
